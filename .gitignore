@@ -1,0 +1,23 @@
+# Ignore object files
+*.o
+
+# Ignore compiled ROM files
+*.gb
+*.gbc
+
+# Ignore symbol files
+*.sym
+*.map
+
+# Ignore other potential build artifacts
+*.elf
+*.hex
+*.sav
+
+# Ignore RGBDS-specific intermediate files
+*.obj
+*.asm.out
+*.lst
+
+# Ignore MacOS system files
+.DS_Store
