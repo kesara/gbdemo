@@ -5,6 +5,9 @@ RGBASM = rgbasm
 RGBLINK = rgblink
 RGBFIX = rgbfix
 
+# Emulateor
+EMU = mGBA
+
 # Source and output files
 SRC = hello-world.asm
 OBJ = hello-world.o
@@ -31,7 +34,11 @@ $(OBJ): $(SRC)
 clean:
 	rm -f $(OBJ) $(ROM)
 
+# Run the ROM in the emulator
+run: $(ROM)
+	$(EMU) $(ROM)
+
 # Rebuild everything from scratch
 rebuild: clean all
 
-.PHONY: all clean rebuild
+.PHONY: all clean rebuild run
