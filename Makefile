@@ -1,44 +1,40 @@
-# Makefile for building a Game Boy ROM
+# Makefile for building Game Boy ROMs
 
 # Compiler tools
 RGBASM = rgbasm
 RGBLINK = rgblink
 RGBFIX = rgbfix
 
-# Emulateor
+# Emulator
 EMU = mGBA
 
-# Source and output files
-SRC = hello-world.asm
-OBJ = hello-world.o
-ROM = hello-world.gb
+# Find all .asm files in the current directory
+ASM_FILES = $(wildcard *.asm)
+OBJ_FILES = $(ASM_FILES:.asm=.o)
+ROM_FILES = $(ASM_FILES:.asm=.gb)
 
 # Flags for the assembler, linker, and fixer
-ASM_FLAGS = -o $(OBJ) $(SRC)
-LINK_FLAGS = -o $(ROM) $(OBJ)
-FIX_FLAGS = -v -p 0xFF $(ROM)
+ASM_FLAGS = -o $@ $<
+LINK_FLAGS = -o $@ $<
+FIX_FLAGS = -v -p 0xFF $@
 
 # Default target
-all: $(ROM)
+all: $(ROM_FILES)
 
-# Build the ROM
-$(ROM): $(OBJ)
+# Pattern rule for building ROM files
+%.gb: %.o
 	$(RGBLINK) $(LINK_FLAGS)
 	$(RGBFIX) $(FIX_FLAGS)
 
-# Assemble the source file
-$(OBJ): $(SRC)
+# Pattern rule for assembling source files
+%.o: %.asm
 	$(RGBASM) $(ASM_FLAGS)
 
 # Clean up build artifacts
 clean:
-	rm -f $(OBJ) $(ROM)
-
-# Run the ROM in the emulator
-run: $(ROM)
-	$(EMU) $(ROM)
+	rm -f $(OBJ_FILES) $(ROM_FILES)
 
 # Rebuild everything from scratch
 rebuild: clean all
 
-.PHONY: all clean rebuild run
+.PHONY: all clean rebuild
