@@ -1,27 +1,37 @@
-# Makefile for assembling empty.asm
+# Makefile for building a Game Boy ROM
 
-# Define tools
+# Compiler tools
 RGBASM = rgbasm
 RGBLINK = rgblink
 RGBFIX = rgbfix
 
-# Define input and output files
-SOURCE = empty.asm
-OBJECT = empty.o
-OUTPUT = empty.gb
+# Source and output files
+SRC = hello-world.asm
+OBJ = hello-world.o
+ROM = hello-world.gb
 
-# Define build rules
-all: $(OUTPUT)
+# Flags for the assembler, linker, and fixer
+ASM_FLAGS = -o $(OBJ) $(SRC)
+LINK_FLAGS = -o $(ROM) $(OBJ)
+FIX_FLAGS = -v -p 0xFF $(ROM)
 
-$(OUTPUT): $(OBJECT)
-	$(RGBLINK) -o $(OUTPUT) $(OBJECT)
-	$(RGBFIX) -v $(OUTPUT)
+# Default target
+all: $(ROM)
 
-$(OBJECT): $(SOURCE)
-	$(RGBASM) -o $(OBJECT) $(SOURCE)
+# Build the ROM
+$(ROM): $(OBJ)
+	$(RGBLINK) $(LINK_FLAGS)
+	$(RGBFIX) $(FIX_FLAGS)
 
+# Assemble the source file
+$(OBJ): $(SRC)
+	$(RGBASM) $(ASM_FLAGS)
+
+# Clean up build artifacts
 clean:
-	rm -f $(OBJECT) $(OUTPUT)
+	rm -f $(OBJ) $(ROM)
 
-# Phony targets
-.PHONY: all clean
+# Rebuild everything from scratch
+rebuild: clean all
+
+.PHONY: all clean rebuild
