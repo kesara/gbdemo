@@ -28,7 +28,7 @@ WaitVBlank:
     ld bc, TilemapEnd - Tilemap
     call Memcopy
 
-    ; Copy the tile data
+    ; Copy the paddle tile
     ld de, Paddle
     ld hl, $8000
     ld bc, PaddleEnd - Paddle
